@@ -15,17 +15,32 @@ class ReposDataStore {
     
     var repositories:[GithubRepository] = []
     
-    func getRepositories(with completion: @escaping () -> ()) {
+    func getRepositories(_ completion: @escaping () -> ()) {
         GithubAPIClient.getRepositories { (reposArray) in
             self.repositories.removeAll()
             for dictionary in reposArray {
                 guard let repoDictionary = dictionary as? [String : Any] else { fatalError("Object in reposArray is of non-dictionary type") }
                 let repository = GithubRepository(dictionary: repoDictionary)
                 self.repositories.append(repository)
-                
             }
             completion()
         }
     }
-
+    
+    //Create a method in ReposDataStore called toggleStarStatus(for: completion:) that, given a GithubRepository object, checks to see if it's starred or not and then either stars or unstars the repo. That is, it should toggle the star on a given repository. In the completion closure, there should be a Bool parameter called starred that is true if the repo was just starred, and false if it was just unstarred.
+    
+    func toggleStarStatus(name: String, _ completion: @escaping (Bool) -> ()) {
+        
+        GithubAPIClient.checkIfRepositoryIsStarred(name: name) { (isStarred) in
+            if isStarred == true {
+                GithubAPIClient.unstarResposity(name: name) { (results) in
+                    completion(true)
+                }
+            } else {
+                GithubAPIClient.starResposity(name: name) { (results) in
+                    completion(true)
+                }
+            }
+        }
+    }
 }

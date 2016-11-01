@@ -23,6 +23,23 @@ class ReposTableViewController: UITableViewController {
                 self.tableView.reloadData()
             })
         }
+        
+        GithubAPIClient.checkIfRepositoryIsStarred(name: "ptangen/FirstApp") {
+            print("The FirstApp repo is starred: \($0)")
+        }
+        
+//        GithubAPIClient.starResposity(name: "ptangen/FirstApp") {
+//            print("Results of attempt to star the \($0) repo: \($1)")
+//        }
+        
+//        GithubAPIClient.unstarResposity(name: "ptangen/FirstApp") {
+//            print("Results of attempt to UNstar the \($0) repo: \($1)")
+//        }
+        
+        store.toggleStarStatus(name: "ptangen/FirstApp") {
+            print("The attempt to toggle the star was successful: \($0)")
+        }
+        
     }
 
     // MARK: - Table view data source
